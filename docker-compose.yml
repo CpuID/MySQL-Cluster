@@ -1,0 +1,34 @@
+mysql1:
+  image: h3nrik/mysql-cluster
+  command: mysqld ndbmgm1
+  links:
+    - redis
+
+mysql2:
+  image: h3nrik/mysql-cluster
+  command: mysqld ndbmgm1
+  links:
+    - redis
+
+ndbmgm1:
+  image: h3nrik/mysql-cluster:latest
+  command: ndb_mgmd ndbmgm1
+  links:
+    - redis
+  volumes:
+    - "./config.ini:/etc/mysql-cluster.ini:ro"
+
+ndbd1:
+  image: h3nrik/mysql-cluster:latest
+  command: ndbd ndbmgm1
+  links:
+    - redis
+
+ndbd2:
+  image: h3nrik/mysql-cluster:latest
+  command: ndbd ndbmgm1
+  links:
+    - redis
+
+redis:
+  image: redis:3.0.6
